@@ -40,7 +40,7 @@ public class Counter {
         store.getState(); // 0
     }
 }
-``
+```
 
 ## Middlewares
 
@@ -59,7 +59,7 @@ public class Counter {
         store.dispatch(INC);
     }
 }
-``
+```
 
 Outputs:
 
@@ -69,7 +69,7 @@ Outputs:
 ## Combine Reducers
 
 ```java
-public class Foo {
+pubic class Foo {
 	Reducer<String, String> concatBar =
 			(action, state) -> "CONCAT".equals(action) ? state + "bar" : state;
 
