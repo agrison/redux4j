@@ -2,12 +2,10 @@ package me.grison.redux4j;
 
 import com.google.gson.Gson;
 import javaslang.collection.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 
 import java.util.*;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.*;
 import java.util.function.Consumer;
 
 /**
@@ -39,6 +37,7 @@ public class Store<State, Action>
 	 *
 	 * @param initialState the initial state
 	 * @param reducer      the reducer
+	 * @param middlewares  the middlewares
 	 */
 	public static <State, Action> Store<State, Action> create(State initialState, Reducer<Action, State> reducer,
 															  Middleware<State, Action>... middlewares) {
@@ -50,6 +49,7 @@ public class Store<State, Action>
 	 *
 	 * @param initialState the initial state
 	 * @param reducer      the reducer
+	 * @param middlewares  the middlewares
 	 */
 	private Store(State initialState, Reducer<Action, State> reducer, Middleware<State, Action>... middlewares) {
 		this.currentState = initialState;

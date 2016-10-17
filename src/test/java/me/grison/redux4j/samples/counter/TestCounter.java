@@ -6,6 +6,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.*;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
 import static javaslang.API.*;
@@ -27,15 +28,23 @@ public class TestCounter {
 
 	final AtomicInteger consumerCount = new AtomicInteger(0);
 	final Consumer<Integer> consumer = (state) -> consumerCount.incrementAndGet();
+
+	final AtomicLong m1Start = new AtomicLong(0);
+	final AtomicLong m1End = new AtomicLong(0);
 	final Middleware<Integer, String> m1 = (store, action, next) -> {
-		System.out.println("START MIDDLEWARE 1");
+		m1Start.set(System.currentTimeMillis());
+		sleep(50);
 		next.accept(store, action, null);
-		System.out.println("END MIDDLEWARE 1");
+		sleep(50);
+		m1End.set(System.currentTimeMillis());
 	};
+
+	final AtomicLong m2Start = new AtomicLong(0);
+	final AtomicLong m2End = new AtomicLong(0);
 	final Middleware<Integer, String> m2 = (store, action, next) -> {
-		System.out.println("START MIDDLEWARE 2");
+		m2Start.set(System.currentTimeMillis());
 		next.accept(store, action, null);
-		System.out.println("END MIDDLEWARE 2");
+		m2End.set(System.currentTimeMillis());
 	};
 
 
@@ -43,7 +52,7 @@ public class TestCounter {
 	public void testCounter() {
 		// Store
 		Integer counter = 0;
-		Store<Integer, String> store = Store.create(counter, reducer);//, m1, m2);
+		Store<Integer, String> store = Store.create(counter, reducer, m2, m1);
 
 		// initial state
 		Assert.assertThat(store.getState(), CoreMatchers.equalTo(0));
@@ -51,24 +60,41 @@ public class TestCounter {
 		// simple inc
 		store.dispatch(INC);
 		Assert.assertThat(store.getState(), CoreMatchers.equalTo(1));
+		assertMiddlewareOrder();
 
 		// multiple inc
 		Stream.of(1, 2, 3).forEach(e -> store.dispatch(INC));
 		Assert.assertThat(store.getState(), CoreMatchers.equalTo(4));
+		assertMiddlewareOrder();
 
 		// multiple dec
 		Stream.of(1, 2, 3, 4, 5).forEach(e -> store.dispatch(DEC));
 		Assert.assertThat(store.getState(), CoreMatchers.equalTo(-1));
+		assertMiddlewareOrder();
 
 		// consumers
 		store.subscribe(consumer);
 		Stream.of(1, 2, 3, 4, 5, 6, 7).forEach(e -> store.dispatch(INC));
 		Assert.assertThat(store.getState(), CoreMatchers.equalTo(6));
 		Assert.assertThat(consumerCount.intValue(), CoreMatchers.equalTo(7));
+		assertMiddlewareOrder();
 
 		store.unsubscribe(consumer);
 		Stream.of(1, 2, 3).forEach(e -> store.dispatch(DEC));
 		Assert.assertThat(store.getState(), CoreMatchers.equalTo(3));
 		Assert.assertThat(consumerCount.intValue(), CoreMatchers.equalTo(7)); // not changed
+		assertMiddlewareOrder();
+	}
+
+	private void assertMiddlewareOrder() {
+		Assert.assertTrue(m1Start.longValue() < m2Start.longValue());
+		Assert.assertTrue(m1End.longValue() > m2End.longValue());
+	}
+
+	private void sleep(long m) {
+		try {
+			Thread.sleep(m);
+		} catch (Throwable e) {
+		}
 	}
 }
