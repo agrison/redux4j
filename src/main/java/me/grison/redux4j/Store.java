@@ -101,7 +101,7 @@ public class Store<State, Action>
 		}
 	}
 
-	public void internalDispatch(Action action) {
+	private void internalDispatch(Action action) {
 		if (DISPATCHER_LOGGER.isDebugEnabled()) {
 			DISPATCHER_LOGGER.debug("Dispatching: " + json(action));
 		}
@@ -134,6 +134,7 @@ public class Store<State, Action>
 
 		consumers.values().parallelStream().forEach(e -> e.accept(currentState));
 		notifyObservers(currentState);
+		setChanged();
 	}
 
 	public UUID subscribe(Consumer<State> subscriber) {
