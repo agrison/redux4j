@@ -72,9 +72,9 @@ public class Store<State, Action>
 
 			middlewareStack = (action) -> List.of(middlewares)
 												  .fold((s1, a1, m) -> internalDispatch(action),
-															   (m1, m2) -> (c, d, e) -> m2.accept(this, action, m1)
+															   (m1, m2) -> (c, d, e) -> m2.accept(this.getState(), action, m1)
 												  )
-												  .accept(this, action, null);
+												  .accept(this.getState(), action, null);
 		}
 	}
 
@@ -101,7 +101,7 @@ public class Store<State, Action>
 		}
 	}
 
-	public void internalDispatch(Action action) {
+	private void internalDispatch(Action action) {
 		if (DISPATCHER_LOGGER.isDebugEnabled()) {
 			DISPATCHER_LOGGER.debug("Dispatching: " + json(action));
 		}
@@ -134,6 +134,7 @@ public class Store<State, Action>
 
 		consumers.values().parallelStream().forEach(e -> e.accept(currentState));
 		notifyObservers(currentState);
+		setChanged();
 	}
 
 	public UUID subscribe(Consumer<State> subscriber) {

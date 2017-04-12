@@ -10,5 +10,5 @@ package me.grison.redux4j;
  */
 @FunctionalInterface
 public interface Middleware<State, Action>
-		extends TriConsumer<ReduxStore<State, Action>, Action, Middleware<State,Action>> {
+		extends TriConsumer<State, Action, Middleware<State,Action>> {
 }
