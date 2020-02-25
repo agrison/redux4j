@@ -1,7 +1,7 @@
 package me.grison.redux4j;
 
 import com.google.gson.Gson;
-import javaslang.collection.List;
+import io.vavr.collection.List;
 import org.slf4j.*;
 
 import java.util.*;
@@ -138,7 +138,7 @@ public class Store<State, Action>
 	}
 
 	public UUID subscribe(Consumer<State> subscriber) {
-		UUID uuid = UUID.randomUUID();
+		var uuid = UUID.randomUUID();
 		this.consumers.put(uuid, subscriber);
 
 		if (SUBSCRIBING_LOGGER.isDebugEnabled()) {

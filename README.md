@@ -1,6 +1,6 @@
 ## Redux in Java
 
-Using Java 8 functional stuff and javaslang.
+Using Java 13 and vavr.
 
 ## Features
 
@@ -19,13 +19,12 @@ public class Counter {
 
     // this is our reducer which increments if INC, decrement if DEC
     // and does nothing otherwise
-    final Reducer<String, Integer> reducer = (action, state) -> {
-        return state + Match(action).of(
-            Case($(INC), 1),
-            Case($(DEC), -1),
-            Case($(), 0)
-        );
-    };
+    final Reducer<String, Integer> reducer =
+            (action, state) -> state + switch (action) {
+                case INC -> 1;
+                case DEC -> -1;
+                default -> 0;
+            };
 
     public void foo() {
         // This is our store with its initial state of zero and the reducer seen above
@@ -69,7 +68,7 @@ Outputs:
 ## Combine Reducers
 
 ```java
-pubic class Foo {
+public class Foo {
 	Reducer<String, String> concatBar =
 			(action, state) -> "CONCAT".equals(action) ? state + "bar" : state;
 

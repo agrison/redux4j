@@ -24,19 +24,19 @@ public class Todos {
 	}
 
 	public Todos addTodo(String todo) {
-		final List<Todo> todos = copyTodos();
+		var todos = copyTodos();
 		todos.add(new Todo(todo));
 		return new Todos(todos, display);
 	}
 
 	public Todos removeTodo(int index) {
-		final List<Todo> todos = copyTodos();
+		var todos = copyTodos();
 		todos.remove(index);
 		return new Todos(todos, display);
 	}
 
 	public Todos toggle(int index) {
-		final List<Todo> todos = copyTodos();
+		var todos = copyTodos();
 		todos.get(index).done = !todos.get(index).done;
 		return new Todos(todos, display);
 	}

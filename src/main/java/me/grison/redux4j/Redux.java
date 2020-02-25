@@ -1,6 +1,6 @@
 package me.grison.redux4j;
 
-import javaslang.Tuple2;
+import io.vavr.Tuple2;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 
 import java.util.Map;
@@ -21,7 +21,7 @@ public class Redux {
 	 * @return a store.
 	 */
 	public static <State, Action> Store<State, Action> createStore(State initialState, Reducer<Action, State> reducer,
-																   Middleware... middlewares) {
+																   Middleware<State, Action>... middlewares) {
 		return Store.create(initialState, reducer, middlewares);
 	}
 
@@ -33,11 +33,11 @@ public class Redux {
 	 */
 	@SafeVarargs
 	public static <State> Reducer<Object, State> combineReducers(Tuple2<String, Reducer>... reducers) {
-		javaslang.collection.Map<String, Reducer> allReducers = javaslang.collection.HashMap.ofEntries(reducers);
+		var allReducers = io.vavr.collection.HashMap.ofEntries(reducers);
 
 		return (action, state) -> {
 			if (state instanceof Map) {
-				Map<String, Object> s = (Map<String, Object>) state;
+				var s = (Map<String, Object>) state;
 				allReducers.forEach((a, r) -> s.put(a, r.apply(action, s.get(a))));
 			} else {
 				allReducers.forEach((a, r) -> {
