@@ -1,6 +1,7 @@
 package me.grison.redux4j.samples.counter;
 
 import io.vavr.collection.Stream;
+import io.vavr.control.Try;
 import me.grison.redux4j.Middleware;
 import me.grison.redux4j.Reducer;
 import me.grison.redux4j.Store;
@@ -92,9 +93,6 @@ public class TestCounter {
     }
 
     private void sleep(long m) {
-        try {
-            Thread.sleep(m);
-        } catch (Throwable e) {
-        }
+        Try.run(() -> Thread.sleep(m));
     }
 }
