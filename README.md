@@ -1,6 +1,8 @@
 ## Redux in Java
 
-Using Java 13 and vavr.
+![redux4j](https://github.com/agrison/redux4j/workflows/redux4j/badge.svg)
+
+Using Java and Vavr.
 
 ## Features
 
@@ -8,6 +10,16 @@ Using Java 13 and vavr.
 * Reducer
 * CombineReducers
 * Middlewares
+
+## Install
+
+```xml
+<dependency>
+  <groupId>me.grison</groupId>
+  <artifactId>redux4j</artifactId>
+  <version>1.0</version>
+</dependency>
+```
 
 ## Counter example
 

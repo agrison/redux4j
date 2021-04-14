@@ -48,6 +48,7 @@ public class Store<State, Action>
      * @param reducer      the reducer
      * @param middlewares  the middlewares
      */
+    @SafeVarargs
     public static <State, Action> Store<State, Action> create(State initialState, Reducer<Action, State> reducer,
                                                               Middleware<State, Action>... middlewares) {
         return new Store<>(initialState, reducer, middlewares);
@@ -60,6 +61,7 @@ public class Store<State, Action>
      * @param reducer      the reducer
      * @param middlewares  the middlewares
      */
+    @SafeVarargs
     private Store(State initialState, Reducer<Action, State> reducer, Middleware<State, Action>... middlewares) {
         currentState = initialState;
         this.reducer = reducer;
@@ -75,9 +77,9 @@ public class Store<State, Action>
 
             middlewareStack = some((action) -> List.of(middlewares)
                     .fold((s1, a1, m) -> internalDispatch(action),
-                            (m1, m2) -> (c, d, e) -> m2.accept(getState(), action, m1)
+                            (m1, m2) -> (c, d, e) -> m2.accept(this, action, m1)
                     )
-                    .accept(getState(), action, null));
+                    .accept(this, action, null));
         }
     }
 
@@ -133,7 +135,7 @@ public class Store<State, Action>
     }
 
     public UUID subscribe(Consumer<State> subscriber) {
-        var uuid = UUID.randomUUID();
+        UUID uuid = UUID.randomUUID();
         consumers = consumers.put(uuid, subscriber);
 
         SUBSCRIBING_LOGGER.debug("Subscribing {}. ID: {}.", subscriber, uuid);

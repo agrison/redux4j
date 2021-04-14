@@ -1,6 +1,7 @@
 package me.grison.redux4j;
 
 import io.vavr.Tuple2;
+import io.vavr.collection.HashMap;
 import io.vavr.control.Try;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 
@@ -33,12 +34,13 @@ public class Redux {
      * @return a reducer combining the given reducers.
      */
     @SafeVarargs
+    @SuppressWarnings("unchecked")
     public static <State> Reducer<Object, State> combineReducers(Tuple2<String, Reducer>... reducers) {
-        var allReducers = io.vavr.collection.HashMap.ofEntries(reducers);
+        HashMap<String, Reducer> allReducers = HashMap.ofEntries(reducers);
 
         return (action, state) -> {
             if (state instanceof Map) {
-                var s = (Map<String, Object>) state;
+                Map<String, Object> s = (Map<String, Object>) state;
                 allReducers.forEach((a, r) -> s.put(a, r.apply(action, s.get(a))));
             } else {
                 allReducers.forEach((a, r) ->
