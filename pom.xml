@@ -7,6 +7,9 @@
     <groupId>me.grison</groupId>
     <artifactId>redux4j</artifactId>
     <version>1.0</version>
+    <name>Redux4j</name>
+    <description>Redux implementation with Java and Vavr</description>
+    <url>https://github.com/agrison/redux4j</url>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -163,11 +166,25 @@
         </repository>
     </distributionManagement>
 
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>agrison</id>
+            <name>Alexandre Grison</name>
+            <email>a.grison@gmail.com</email>
+            <url>https://grison.me</url>
+        </developer>
+    </developers>
     <scm>
         <connection>scm:git:git://github.com/agrison/redux4j.git</connection>
         <developerConnection>scm:git:git@github.com:agrison/redux4j.git</developerConnection>
         <url>https://github.com/agrison/redux4j</url>
         <tag>HEAD</tag>
     </scm>
-
 </project>
