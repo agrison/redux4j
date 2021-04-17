@@ -6,7 +6,7 @@
 
     <groupId>me.grison</groupId>
     <artifactId>redux4j</artifactId>
-    <version>1.0</version>
+    <version>1.1-SNAPSHOT</version>
     <name>Redux4j</name>
     <description>Redux implementation with Java and Vavr</description>
     <url>https://github.com/agrison/redux4j</url>
