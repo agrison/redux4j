@@ -1,6 +1,6 @@
 ## Redux in Java
 
-![redux4j](https://github.com/agrison/redux4j/workflows/redux4j/badge.svg)
+![redux4j](https://github.com/agrison/redux4j/workflows/build/badge.svg)
 
 Using Java and Vavr.
 

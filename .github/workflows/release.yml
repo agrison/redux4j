@@ -1,13 +1,15 @@
 # This workflow will build a Java project with Maven
 # For more information see: https://docs.github.com/en/actions/guides/building-and-testing-java-with-maven
 
-name: redux4j
+name: release
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    paths:
+      - "pom.xml"
+      - "src/main/java/me/grison/redux4j/*.java"
+      - "src/test/java/me/grison/**/*.java"
+    branches: [ 'releases/**' ]
 
 jobs:
   build:
@@ -23,6 +25,10 @@ jobs:
           distribution: 'adopt'
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots verify
+      - name: Codecov
+        uses: codecov/codecov-action@v1.3.2
+        with:
+          file: ./target/site/jacoco/jacoco.xml
       - name: Receiving GPG key
         run: gpg --keyserver hkp://hkps.pool.sks-keyservers.net --recv-keys ${{secrets.GPG_KEYID}}
       - name: Import GPG Owner Trust
@@ -37,3 +43,7 @@ jobs:
           servers: '[{"id": "ossrh", "username": "${{secrets.SONATYPE_USERNAME}}", "password": "${{secrets.SONATYPE_PASSWORD}}"}]'
       - name: Deploy a new version to central
         run: mvn clean deploy -B -DskipTests -DskipExamples -Prelease -Dgpg.keyname=${{secrets.GPG_KEYNAME}} -Dgpg.passphrase=${{secrets.GPG_PASSPHRASE}}
+
+
+
+
