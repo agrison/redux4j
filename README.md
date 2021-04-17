@@ -1,6 +1,7 @@
 ## Redux in Java
 
 ![redux4j](https://github.com/agrison/redux4j/workflows/build/badge.svg)
+[![codecov](https://codecov.io/gh/agrison/redux4j/branch/master/graph/badge.svg?token=lkICxLZmij)](https://codecov.io/gh/agrison/redux4j)
 
 Using Java and Vavr.
 
